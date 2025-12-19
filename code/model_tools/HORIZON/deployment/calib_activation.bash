@@ -1,0 +1,1 @@
+hmct-debugger get-sensitivity-of-nodes quant_500_e03/torch-jit-export_subnet0_calibrated_model.onnx calibration_data/ -m ['cosine-similarity','mse'] -v True -n activation

@@ -1,0 +1,271 @@
+NET: second_net
+BOX_CODER: ResidualCoder
+CLASSES: ['Car', "Pedestrian", "Cyclist", "Truck"]
+RPN_BASE_MODEL: RPNBase #RPNBase_ResNet RPNBase HourglassNet HourglassNet_Lite RPNBase_DenseNet RPNBase_VoVNet
+
+FPGA_NMS: true
+USE_RELU6: False
+
+DB_SAMPLER:
+    ENABLED: true
+    OBJECT_ROT_RANGE: [0.0, 0.0]
+    PREPARE:
+        filter_by_difficulty: [-1]
+        filter_by_min_points: ['Car:5', 'Pedestrian:5', 'Cyclist:10', 'Truck:5']
+    RATE: 1.0
+    SAMPLE_GROUPS: ['Car:15', 'Pedestrian:0', 'Cyclist:10', 'Truck:10']
+    USE_ROAD_PLANE: false
+    # should be the same as point cloud range by default
+    OBJECT_RANGE: [-71.68, -71.68, -10, 92.16, 71.68, 5]
+    OBJECT_MV_RANGE: [0, 0, 0, 0, 0, 0]
+    ADD_MODE: true
+    SAMPLE_ADD_GROUPS: {'Car':3, 'Pedestrian':0, 'Cyclist':0, 'Truck':3}
+
+
+INPUT_DATA:
+    ROOT_PATH: ""
+    USE_INTENSITY: false
+    GLOABL_ROT_UNIFORM_NOISE: [-0.3925, 0.3925]
+    GLOABL_SCALING_UNIFORM_NOISE: [0.95, 1.05]
+    GLOBAL_ROT_RANGE_PER_OBJECT: [0.0, 0.0] #unuse
+    GT_EXTEND_WIDTH: 0.2 #unuse
+    GT_LOC_NOISE_STD: [0, 0, 0]
+    GT_ROT_UNIFORM_NOISE: [-0.15707963267, 0.15707963267]
+    ENABLE_BACKWARD_TRAINING: False
+    BACKWARD_RATE: 0.2
+    PED_FILTER_POINTS: 0
+    GLOABL_TRANS_NORMAL_NOISE: [0.75, 0.75, 0.5]
+    FLIP_Y_PROB: 0.3
+    GLOBAL_DROPOUT_MAX_RATIO: 0.1
+    TRAIN:  
+        INFO_PATH: "/mnt/lustre/share/songxiao/3ddet/internal_18W-PK1-2_int-10_around.pkl"
+        DBINFO_PATH: "/mnt/lustre/share/songxiao/3ddet/internal_18W-PK1-2_int-10_db_infos_around.pkl"
+        UNLABEL_INFO_PATH: "/mnt/lustre/datatag/songxiao/SH-Unlabeled-V1/all_seq_non_label.pkl"
+        MAX_NUMBER_OF_VOXELS: 100000
+        SHUFFLE_POINTS: true
+    TEST:
+        INFO_PATH: "/mnt/lustre/share/songxiao/data/hesai_test_20-0113/hesai_20-0113_around_alpha.pkl"
+        MAX_NUMBER_OF_VOXELS: 100000
+        SHUFFLE_POINTS: true
+
+
+VOXEL_GENERATOR:
+    MAX_POINTS_PER_VOXEL: 100
+    POINT_CLOUD_RANGE: [-71.68, -71.68, -10, 92.16, 71.68, 5]
+    VOXEL_SIZE: [0.16, 0.16, 15]
+
+
+TARGET_ASSIGNER:
+    ANCHOR_GENERATOR: [
+          {
+             'type': "anchor_generator_stride",
+             'anchor_range': [-71.68, -71.68, -10, 92.16, 71.68, 5],
+             'sizes': [[1.97, 4.40, 1.64]], #[1.92, 4.38, 1.60] [1.97, 4.40, 1.64] [1.6, 3.9, 1.56]
+             'strides': [0.32, 0.32, 0.0], 
+             'offsets': [-71.52, -71.52, -1.78],
+             'rotations': [0, 1.57],
+             'matched_threshold': 0.65,
+             'unmatched_threshold': 0.5,
+             'feature_map_scale_factor': 1,
+             'class_name': 'Car'
+          },
+         {
+             'type': "anchor_generator_stride",
+             'anchor_range': [-71.68, -71.68, -10, 92.16, 71.68, 5],
+             'sizes': [[0.54, 0.62, 1.64]], #[0.57, 0.51, 1.60] [0.54, 0.62, 1.64] [0.53240478, 0.66566971, 1.61112157] [0.6, 0.8, 1.73] [0.61, 0.53, 1.64]
+             'strides': [0.32, 0.32, 0.0], 
+             'offsets': [-71.52, -71.52, -1.78],
+             'rotations': [0, 1.57],
+             'matched_threshold': 0.4,
+             'unmatched_threshold': 0.25,
+             'feature_map_scale_factor': 1,
+             'class_name': 'Pedestrian'
+         },
+         {
+             'type': "anchor_generator_stride",
+             'anchor_range': [-71.68, -71.68, -10, 92.16, 71.68, 5],
+             'sizes': [[0.80, 1.77, 1.57]], #[0.79, 1.80, 1.56] [0.80, 1.77, 1.57] [0.78809369, 1.85949902, 1.59098894] [0.6, 1.76, 1.73]
+             'strides': [0.32, 0.32, 0.0], 
+             'offsets': [-71.52, -71.52, -1.78],
+             'rotations': [0, 1.57],
+             'matched_threshold': 0.4,
+             'unmatched_threshold': 0.25,
+             'feature_map_scale_factor': 1,
+             'class_name': 'Cyclist'
+         },
+         {
+             'type': "anchor_generator_stride",
+             'anchor_range': [-71.68, -71.68, -10, 92.16, 71.68, 5],
+             'sizes': [[2.82, 9.25, 2.96]], #[2.83, 9.03, 3.07] [2.82, 9.25, 2.96] [2.47260725, 9.2988827, 3.19247013] [[2.57, 6.57, 2.69],[3.06, 11.21, 3.42]]
+             'strides': [0.64, 0.64, 0.0], 
+             'offsets': [-71.36, -71.36, -1.78],
+             'rotations': [0, 1.57],
+             'matched_threshold': 0.65,
+             'unmatched_threshold': 0.5,
+             'feature_map_scale_factor': 0.5,
+             'class_name': 'Truck'
+         },
+    ]
+    REGION_SIMILARITY_FN: nearest_iou_similarity #nearest_iou_similarity rotated_iou_similarity
+    SAMPLE_POS_FRACTION: -1.0
+    SAMPLE_SIZE: 512
+
+
+RPN_STAGE:
+    NET: PointPillarsScatter
+    DOWNSAMPLE_FACTOR: 2
+    NUM_HEAD_INPUT_FEATURES: 64
+    ENCODE_BG_AS_ZEROS: true
+    USE_SIGMOID_SCORE: true
+    USE_ROTATED_NMS: false #false
+    AUTOWEIGHT: true
+    AUTO_ONLY_PED_CYC: true
+    AUTO_ONLY_PED_CYC_TRUCK: false
+    AUTOWEIGHT_COFF: 1.0
+    AUTOWEIGHT_INIT: true
+    AUTO_POS_CLS: false
+    AUTOWEIGHT_CLASS_BAL: true
+    AUTOWEIGHT_CLASS_BAL_COFF: 0.2
+    AUTOWEIGHT_FIXED: false
+    EQL_CLS: false
+    EQL_RARE_CLASS: [1]
+
+    BACKBONE:
+        PART_REG_ENABLED: true
+        PRE_ACTIVATION: false
+        USE_GROUPNORM: false
+        NUM_GROUPS: 16
+        VoV_TRANS_CONCAT: false
+        VoV_SE: false
+        VoV_IDMAP: false
+        FPN:
+            PP_FPN: false
+            FPGA_FPNv1: false
+            FPGA_FPNv2: true
+            FPN_STACK_NUM: 2
+
+    RPN_HEAD:
+        NET: MultiHeadRPN
+        NUM_INPUT_FEATURES: 64
+        USE_DIRECTION_CLASSIFIER: true
+        ENCODE_RAD_ERROR_BY_SIN: true
+        HEAD_INIT_WEIGHT: true
+        LOC_SIGMA: 4.0
+        REG_VARIANCE:
+            OUTPUT: true
+            KL_LOSS: true
+        FPGA_IOU_LOSS:
+            USE: true
+            CLS_IOU_LOSS: true
+            LOC_IOU_LOSS: false
+
+        RPN_BASE_ARGS: {
+                "use_norm": True,
+                "layer_nums": [4, 5, 6],
+                "layer_strides": [2, 2, 2],
+                "num_filters": [128, 160, 192],
+                "upsample_strides": [1, 2, 4],
+                "num_upsample_filters": [96, 96, 96],
+                "num_input_features": 64,
+                "use_groupnorm": False,
+                "num_groups": 16,
+                "use_deconv": False,
+                "pre_conv": True,
+                "resblock": 'BasicBlock', #BasicBlock Bottleneck Bottleneck_V15
+                "res_stage_1_split_conv": True,
+                "num_res_stages": 3,
+                "num_res_blocks": [5, 15, 16],
+                "res_stage_dilation": [False, False, False],
+                "num_res_filters": [160, 192, 224],
+                "num_hourglass_stacks": 1,
+                "num_hourglass_blocks": 1,
+                "num_hourglass_feats": 128,
+                "dense_layer_type": 'B',
+                "num_dense_stages": 3,
+                "num_dense_blocks": [4, 5, 6],
+                "num_dense_filters": [128, 64, 64]
+        }
+
+        LOSS_WEIGHTS: {
+                'cls_weight': 1.0,
+                'loc_weight': 2.0,
+                'dir_weight': 0.2
+            }
+        RPN_HEAD_ARGS: [
+            {
+                "class_name": ["Car", "Pedestrian", "Cyclist"],
+                "num_filters": 128,
+                "conv_nums": 0,
+                "dilation": [],
+                "use_se": False,
+                "use_res": False,
+                "use_glore": False,
+                "use_shuffle": False,
+                "downsample_level": 2,
+                "ratio": 4,
+                "se_ratio": 8,
+                "num_res": 1,
+                "ds_keep_ratio": 0.75
+            },
+            {
+                "class_name": ["Truck"],
+                "num_filters": 256,
+                "conv_nums": 0,
+                "dilation": [],
+                "use_se": False,
+                "use_res": False,
+                "use_glore": False,
+                "use_shuffle": False,
+                "downsample_level": 4,
+                "ratio": 4,
+                "se_ratio": 8,
+                "num_res": 1,
+                "ds_keep_ratio": 0.75
+            }
+
+        ]
+
+    VOXEL_ENCODER:
+        NAME: PillarFeatureNet
+        INPUT_FEATURES: 4
+        NUM_FILTERS: [64]
+        WITH_DISTANCE: false
+        WITH_ZMIN_OFFSET: false
+
+
+TRAIN:
+    SPLIT: train
+    OPTIMIZER: adam_onecycle
+    LR: 0.0045
+    LR_SCHEDULER: onecycle
+    WEIGHT_DECAY: 0.001
+
+    LR_WARMUP: false
+    WARMUP_EPOCH: 1
+    MOMENTUM: 0.9
+    MOMS: [0.95, 0.85]
+    PCT_START: 0.4
+    DIV_FACTOR: 10
+    GRAD_NORM_CLIP: 10
+
+    CAR_LS: 1.0
+    PED_LS: 2.0
+    CYC_LS: 2.0
+    TRUCK_LS: 2.0
+    POS_LS: 4.0
+
+
+TEST:
+    SPLIT: val
+    POST_CENTER_LIMIT_RANGE: [-70, -70, -5, 70, 70, 5] #[-70, -72, -5, 90, 72, 5] [-70, -70, -5, 70, 70, 5]
+    NMS_THRESH: 0.1
+    CAR_NMS_THRESH: 0.5 #0.5
+    PED_NMS_THRESH: 0.5 #0.5
+    CYC_NMS_THRESH: 0.35 #0.35
+    TRUCK_NMS_THRESH: 0.4 #0.45
+    CAR_SCORE_THRESH: 0.3
+    PED_SCORE_THRESH: 0.1
+    CYC_SCORE_THRESH: 0.2
+    TRUCK_SCORE_THRESH: 0.3
+    EVAL_IN_LIDAR: true
+    EVAL_WITH_CLOSEBOX: false

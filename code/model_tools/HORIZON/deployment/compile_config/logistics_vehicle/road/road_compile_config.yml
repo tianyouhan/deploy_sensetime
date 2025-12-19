@@ -1,0 +1,129 @@
+model_parameters:
+  onnx_model: model_gs.onnx # 运行change脚本后的onnx模型
+  march: nash-p
+  output_model_file_prefix: torch-jit-export_subnet0
+  working_dir: road_rclane_quant_result # hbm模型保存路径
+  #remove_node_type: Dequantize;Quantize
+  # debug_mode: dump_calibration_data
+  enable_vpu: true
+  node_info: {
+          "Conv_3": {
+            "InputType": "int16"
+          },
+          "Conv_5": {
+            "InputType": "int16"
+          },
+          "Conv_8": {
+            "InputType": "int16"
+          },
+          "Conv_6": {
+            "InputType": "int16"
+          },
+          "Add_360": {
+            "InputType": "int16"
+          },
+          "Add_358": {
+            "InputType": "int16"
+          },
+          "Add_359": {
+            "InputType": "int16"
+          },
+          "Conv_145": {
+            "InputType": "int16"
+          },
+          "Conv_383": {
+            "InputType": "int16"
+          },
+          "Conv_282": {
+            "InputType": "int16"
+          },
+          "Conv_386": {
+            "InputType": "int16"
+          },
+          "Conv_388": {
+            "InputType": "int16"
+          },
+          "Softmax_318": {
+            "InputType": "int16"
+          },
+          "Transpose_319": {
+            "InputType": "int16"
+          },
+          "Conv_422": {
+            "InputType": "int16"
+          },
+          "Conv_424": {
+            "InputType": "int16"
+          },
+          "Conv_423": {
+            "InputType": "int16"
+          },
+          "Conv_202": {
+            "InputType": "int16"
+          },
+          # "Softmax_380": {
+          #   "ON": "BPU"
+          # }
+          # "Conv_301": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_299": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_297": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_295": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_284": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_282": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_280": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_278": {
+          #   "InputType": "int16"
+          # },
+          # "Conv_276": {
+          #   "InputType": "int16"
+          # },
+      }
+  layer_out_dump: False
+input_parameters:
+  input_name: image_center_camera_fov120; image_center_camera_fov30; image_center_camera_fov60; image_left_front_camera; image_right_front_camera; image_rear_camera; xyz_pix; valid_mask
+  input_type_train: bgr; bgr; bgr; bgr; bgr; bgr; featuremap; featuremap
+  input_layout_train: NCHW; NCHW; NCHW; NCHW; NCHW; NCHW; NCHW; NCHW
+  input_type_rt: nv12; nv12; nv12; nv12; nv12; nv12; featuremap; featuremap
+  # input_type_rt: featuremap; featuremap; featuremap; featuremap; featuremap; featuremap; featuremap; featuremap;
+  input_shape: 1x3x480x1024; 1x3x480x1024; 1x3x480x1024; 1x3x480x1024; 1x3x480x1024; 1x3x480x1024; 6x200x200x2; 6x1x200x200
+  mean_value: 103.53 116.28 123.675; 103.53 116.28 123.675; 103.53 116.28 123.675; 103.53 116.28 123.675; 103.53 116.28 123.675; 103.53 116.28 123.675; None; None
+  scale_value: 0.017429193899782137 0.01750700280112045 0.017124753831663668; 0.017429193899782137 0.01750700280112045 0.017124753831663668; 0.017429193899782137 0.01750700280112045 0.017124753831663668; 0.017429193899782137 0.01750700280112045 0.017124753831663668; 0.017429193899782137 0.01750700280112045 0.017124753831663668; 0.017429193899782137 0.01750700280112045 0.017124753831663668;  None; None
+  norm_type: data_mean_and_scale; data_mean_and_scale; data_mean_and_scale; data_mean_and_scale; data_mean_and_scale; data_mean_and_scale; no_preprocess; no_preprocess
+calibration_parameters:
+  cal_data_dir: ./calibration_data_dir/image_center_camera_fov120; ./calibration_data_dir/image_center_camera_fov30; ./calibration_data_dir/image_center_camera_fov60; ./calibration_data_dir/image_left_front_camera; ./calibration_data_dir/image_right_front_camera; ./calibration_data_dir/image_rear_camera; ./calibration_data_dir/xyz_pix; ./calibration_data_dir/valid_mask
+  # 指定量化数据集位置↑
+  optimization: asymmetric
+  per_channel: True
+  calibration_type: mix
+  #cal_data_type: float32; float32; float32; float32; float32; float32; float32; float32;
+compiler_parameters:
+  extra_params: {'input_no_padding': True, 'output_no_padding': True}
+  compile_mode: latency
+  optimize_level: O2
+  debug: True
+  jobs: 40
+  #input_source: resizer
+
+
+
+
+
+
+
+
+
+

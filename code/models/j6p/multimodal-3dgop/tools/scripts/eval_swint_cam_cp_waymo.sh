@@ -1,0 +1,1 @@
+./scripts/slurm_test_mgpu.sh adv100 8 --cfg_file=cfgs/waymo_models/swint_cam_cp_v2_5.yaml --extra_tag cam --ckpt /mnt/lustrenew/zhanghongcheng/zhc/OpenPCDet/output/waymo_models/swint_cam_cp_v2_5/default/ckpt/checkpoint_epoch_20.pth

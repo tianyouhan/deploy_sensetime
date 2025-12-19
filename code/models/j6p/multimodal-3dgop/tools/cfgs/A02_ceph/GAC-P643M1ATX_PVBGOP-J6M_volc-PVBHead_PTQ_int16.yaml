@@ -1,0 +1,38 @@
+model_parameters:
+  march: nash-m
+  onnx_model: /iag_ad_01/ad/zhanghongcheng/code/multimodal-3dgop/tools/onnx_utils/checkpoints/GAC-P643M1ATX_PVBGOP-J6M_volc_1003/ep58_splitbkb_1003/lidar-head-sim.onnx
+  output_model_file_prefix: lidar-head-pvb-vpu
+  working_dir: ./int16-vpu-1003-V17ep58
+  layer_out_dump: True
+  # remove_node_type: Quantize;Dequantize
+  enable_vpu: True
+  node_info: {
+    "Conv_12":{
+    "InputType":"int16"},
+    "Conv_37":{
+    "InputType":"int16"},
+  }
+
+
+input_parameters:
+  input_layout_train: NCHW
+  input_name: spatial_features_2d_lidar
+  input_shape: 1x96x48x320
+  input_type_rt: featuremap
+  input_type_train: featuremap
+calibration_parameters:
+  cal_data_dir: /iag_ad_01/ad/zhanghongcheng/code/multimodal-3dgop-Main_LidarPVBGOP_v1.11.0/output/A02_ceph/GAC-P643M1ATX_PVBGOP-J6M_volc_qat_smallrange_v0_0909_atx_splitbkb/calib_dump_V17ep58_splitbkb/lidar-bev-backbone/outputs/spatial_features_2d_lidar
+  calibration_type: max
+  cal_data_type: float32
+  activation_quantize_bits: 16
+  quant_config: {
+    "model_config": {
+        "all_node_type": "int16",
+        "model_output_type": "int16",
+    }
+  }
+compiler_parameters:
+  extra_params: {'input_no_padding': True, 'output_no_padding': True}
+  compile_mode: bandwidth
+  optimize_level: O2
+  debug: True

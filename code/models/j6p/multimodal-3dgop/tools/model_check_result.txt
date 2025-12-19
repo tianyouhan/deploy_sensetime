@@ -1,0 +1,186 @@
+All fusable modules are fused in model!
+
+
+Modules below are not used:
+name                                                  called times
+--------------------------------------------------  --------------
+backbone_2d.downblocks.0.0                                       0
+backbone_2d.downblocks.0.1                                       0
+backbone_2d.downblocks.0.2                                       0
+backbone_2d.downblocks.0.3                                       0
+backbone_2d.downblocks.0.4                                       0
+backbone_2d.downblocks.0.5                                       0
+backbone_2d.downblocks.0.6                                       0
+backbone_2d.downblocks.0.7                                       0
+backbone_2d.downblocks.0.8                                       0
+backbone_2d.downblocks.0.9                                       0
+backbone_2d.downblocks.0.10                                      0
+backbone_2d.downblocks.0.11                                      0
+backbone_2d.downblocks.0.12                                      0
+backbone_2d.downblocks.0.13                                      0
+backbone_2d.downblocks.0.14                                      0
+backbone_2d.downblocks.1.0                                       0
+backbone_2d.downblocks.1.1                                       0
+backbone_2d.downblocks.1.2                                       0
+backbone_2d.downblocks.1.3                                       0
+backbone_2d.downblocks.1.4                                       0
+backbone_2d.downblocks.1.5                                       0
+backbone_2d.downblocks.1.6                                       0
+backbone_2d.downblocks.1.7                                       0
+backbone_2d.downblocks.1.8                                       0
+backbone_2d.downblocks.1.9                                       0
+backbone_2d.downblocks.1.10                                      0
+backbone_2d.downblocks.1.11                                      0
+backbone_2d.downblocks.1.12                                      0
+backbone_2d.downblocks.1.13                                      0
+backbone_2d.downblocks.1.14                                      0
+backbone_2d.downblocks.2.0                                       0
+backbone_2d.downblocks.2.1                                       0
+backbone_2d.downblocks.2.2                                       0
+backbone_2d.downblocks.2.3                                       0
+backbone_2d.downblocks.2.4                                       0
+backbone_2d.downblocks.2.5                                       0
+backbone_2d.downblocks.2.6                                       0
+backbone_2d.downblocks.2.7                                       0
+backbone_2d.downblocks.2.8                                       0
+backbone_2d.downblocks.2.9                                       0
+backbone_2d.downblocks.2.10                                      0
+backbone_2d.downblocks.2.11                                      0
+backbone_2d.downblocks.2.12                                      0
+backbone_2d.downblocks.2.13                                      0
+backbone_2d.downblocks.2.14                                      0
+backbone_2d.upblocks.0.0                                         0
+backbone_2d.upblocks.0.1                                         0
+backbone_2d.upblocks.1.0                                         0
+backbone_2d.upblocks.1.1                                         0
+backbone_2d.lateral_layers.0.0                                   0
+backbone_2d.lateral_layers.1.0                                   0
+backbone_2d.lateral_layers.2.0                                   0
+backbone_2d.smooth_layers.0.0                                    0
+backbone_2d.smooth_layers.1.0                                    0
+backbone_2d.upfinal.0.0                                          0
+backbone_2d.upfinal.1.0                                          0
+backbone_2d.upfinal.1.1                                          0
+backbone_2d.upfinal.1.2                                          0
+backbone_2d.upfinal.2.0                                          0
+backbone_2d.upfinal.2.1                                          0
+backbone_2d.upfinal.2.2                                          0
+backbone_2d.upfinal.2.3                                          0
+backbone_2d.upfinal.2.4                                          0
+backbone_2d.CA_pooling                                           0
+backbone_2d.CA.0                                                 0
+backbone_2d.CA.1                                                 0
+backbone_2d.CA.2                                                 0
+dense_head_det_lidar.rpn_heads.0.net.0                           0
+dense_head_det_lidar.rpn_heads.0.net.1                           0
+dense_head_det_lidar.rpn_heads.0.net.2                           0
+dense_head_det_lidar.rpn_heads.0.net.3                           0
+dense_head_det_lidar.rpn_heads.0.net.4                           0
+dense_head_det_lidar.rpn_heads.0.net.5                           0
+dense_head_det_lidar.rpn_heads.0.net.6                           0
+dense_head_det_lidar.rpn_heads.0.net.7                           0
+dense_head_det_lidar.rpn_heads.0.net.8                           0
+dense_head_det_lidar.rpn_heads.0.net.9                           0
+dense_head_det_lidar.rpn_heads.0.conv_cls                        0
+dense_head_det_lidar.rpn_heads.0.conv_box                        0
+dense_head_det_lidar.rpn_heads.0.conv_dir_cls                    0
+dense_head_det_lidar.rpn_heads.0.conv_var_head                   0
+dense_head_det_lidar.rpn_heads.1.net.0                           0
+dense_head_det_lidar.rpn_heads.1.net.1                           0
+dense_head_det_lidar.rpn_heads.1.net.2                           0
+dense_head_det_lidar.rpn_heads.1.net.3                           0
+dense_head_det_lidar.rpn_heads.1.net.4                           0
+dense_head_det_lidar.rpn_heads.1.net.5                           0
+dense_head_det_lidar.rpn_heads.1.net.6                           0
+dense_head_det_lidar.rpn_heads.1.net.7                           0
+dense_head_det_lidar.rpn_heads.1.net.8                           0
+dense_head_det_lidar.rpn_heads.1.net.9                           0
+dense_head_det_lidar.rpn_heads.1.decoupled_conv1.0               0
+dense_head_det_lidar.rpn_heads.1.decoupled_conv1.1               0
+dense_head_det_lidar.rpn_heads.1.decoupled_conv1.2               0
+dense_head_det_lidar.rpn_heads.1.decoupled_conv2.0               0
+dense_head_det_lidar.rpn_heads.1.decoupled_conv2.1               0
+dense_head_det_lidar.rpn_heads.1.decoupled_conv2.2               0
+dense_head_det_lidar.rpn_heads.1.conv_cls                        0
+dense_head_det_lidar.rpn_heads.1.conv_box                        0
+dense_head_det_lidar.rpn_heads.1.conv_dir_cls                    0
+dense_head_det_lidar.rpn_heads.1.conv_var_head                   0
+dense_head_det_lidar_gop.rpn_heads.0.net.0                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.1                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.2                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.3                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.4                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.5                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.6                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.7                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.8                       0
+dense_head_det_lidar_gop.rpn_heads.0.net.9                       0
+dense_head_det_lidar_gop.rpn_heads.0.conv_cls                    0
+dense_head_det_lidar_gop.rpn_heads.0.conv_box                    0
+dense_head_det_lidar_gop.rpn_heads.0.conv_dir_cls                0
+dense_head_det_lidar_gop.rpn_heads.0.conv_var_head               0
+
+input dtype statistics:
++-----------------------------------------------------------+-----------------+----------+
+| module type                                               |   torch.float32 |   qint16 |
+|-----------------------------------------------------------+-----------------+----------|
+| <class 'horizon_plugin_pytorch.nn.qat.stubs.QuantStub'>   |               1 |        0 |
+| <class 'horizon_plugin_pytorch.nn.qat.conv2d.ConvReLU2d'> |               0 |        1 |
+| <class 'horizon_plugin_pytorch.nn.qat.stubs.DeQuantStub'> |               0 |        1 |
+| total                                                     |               1 |        2 |
++-----------------------------------------------------------+-----------------+----------+
+
+output dtype statistics:
++-----------------------------------------------------------+-----------------+----------+
+| module type                                               |   torch.float32 |   qint16 |
+|-----------------------------------------------------------+-----------------+----------|
+| <class 'horizon_plugin_pytorch.nn.qat.stubs.QuantStub'>   |               0 |        1 |
+| <class 'horizon_plugin_pytorch.nn.qat.conv2d.ConvReLU2d'> |               0 |        1 |
+| <class 'horizon_plugin_pytorch.nn.qat.stubs.DeQuantStub'> |               1 |        0 |
+| total                                                     |               1 |        2 |
++-----------------------------------------------------------+-----------------+----------+
+
+Each layer out qconfig:
++-----------------------------------------------+-----------------------------------------------------------+-----------------+-----------------+----------------+-------------+
+| Module Name                                   | Module Type                                               | Input dtype     | out dtype       | ch_axis        | observer    |
+|-----------------------------------------------+-----------------------------------------------------------+-----------------+-----------------+----------------+-------------|
+| vfe.quan_vfe_input                            | <class 'horizon_plugin_pytorch.nn.qat.stubs.QuantStub'>   | [torch.float32] | ['qint16']      | -1             | MSEObserver |
+| vfe.pfn_layers.0.Conv2d                       | <class 'horizon_plugin_pytorch.nn.qat.conv2d.ConvReLU2d'> | ['qint16']      | ['qint16']      | -1             | MSEObserver |
+| map_to_bev_module.spatial_features_2d_dequant | <class 'horizon_plugin_pytorch.nn.qat.stubs.DeQuantStub'> | ['qint16']      | [torch.float32] | qconfig = None |             |
++-----------------------------------------------+-----------------------------------------------------------+-----------------+-----------------+----------------+-------------+
+
+Weight qconfig:
++-------------------------+-----------------------------------------------------------+----------------+-----------+----------------+
+| Module Name             | Module Type                                               | weight dtype   |   ch_axis | observer       |
+|-------------------------+-----------------------------------------------------------+----------------+-----------+----------------|
+| vfe.pfn_layers.0.Conv2d | <class 'horizon_plugin_pytorch.nn.qat.conv2d.ConvReLU2d'> | qint8          |         0 | MinMaxObserver |
++-------------------------+-----------------------------------------------------------+----------------+-----------+----------------+
+
+Please check if these OPs qconfigs are expected..
++--------------------+---------------------------------------------------------+-----------------------------+
+| Module Name        | Module Type                                             | Msg                         |
+|--------------------+---------------------------------------------------------+-----------------------------|
+| vfe.quan_vfe_input | <class 'horizon_plugin_pytorch.nn.qat.stubs.QuantStub'> | Fixed input scale 0.0078125 |
++--------------------+---------------------------------------------------------+-----------------------------+
+
+Graph:
+opcode         name                                           target                                                  args                                                 kwargs
+-------------  ---------------------------------------------  ------------------------------------------------------  ---------------------------------------------------  ---------------------------
+placeholder    input_0                                        input_0                                                 ()                                                   {}
+call_module    vfe_quan_vfe_input                             vfe.quan_vfe_input                                      (input_0,)                                           {}
+call_module    vfe_pfn_layers_0_conv2d                        vfe.pfn_layers.0.Conv2d                                 (vfe_quan_vfe_input,)                                {}
+call_module    vfe_pfn_layers_0_norm                          vfe.pfn_layers.0.norm                                   (vfe_pfn_layers_0_conv2d,)                           {}
+call_module    _generated_relu_0                              _generated_relu_0                                       (vfe_pfn_layers_0_norm,)                             {'inplace': False}
+call_function  permute                                        <method 'permute' of 'torch._C.TensorBase' objects>     (_generated_relu_0, 0, 2, 1, 3)                      {}
+call_function  contiguous                                     <method 'contiguous' of 'torch._C.TensorBase' objects>  (permute,)                                           {}
+call_function  max_1                                          <built-in method max of type object at 0x7fb613c5a760>  (contiguous,)                                        {'dim': 1, 'keepdim': True}
+call_function  __getitem___3                                  <slot wrapper '__getitem__' of 'tuple' objects>         (max_1, 0)                                           {}
+call_function  __getitem___4                                  <slot wrapper '__getitem__' of 'tuple' objects>         (max_1, 1)                                           {}
+call_function  squeeze                                        <method 'squeeze' of 'torch._C.TensorBase' objects>     (__getitem___3, -1)                                  {}
+call_function  squeeze_1                                      <method 'squeeze' of 'torch._C.TensorBase' objects>     (squeeze, 1)                                         {}
+placeholder    input_1                                        input_1                                                 ()                                                   {}
+call_function  point_pillars_scatter                          <function point_pillars_scatter at 0x7fb51c425cf0>      (squeeze_1, input_1, (1, 32, 96, 640))               {}
+call_module    map_to_bev_module_spatial_features_2d_dequant  map_to_bev_module.spatial_features_2d_dequant           (point_pillars_scatter,)                             {}
+call_function  scope_end                                      <function Tracer.scope_end at 0x7fb51c120e50>           ('',)                                                {}
+output         output                                         output                                                  ((map_to_bev_module_spatial_features_2d_dequant,),)  {}
+

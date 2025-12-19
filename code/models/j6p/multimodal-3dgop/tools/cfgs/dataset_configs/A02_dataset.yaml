@@ -1,0 +1,74 @@
+DATASET: 'GACBaiduDataset'
+DATA_PATH: '../data/A02'
+
+POINT_CLOUD_RANGE: &POINT_CLOUD_RANGE [0, -20.48, -4, 102.4, 20.48, 4]
+VOXEL_SIZE: &VOXEL_SIZE [0.16, 0.16, 8]
+
+CLASS_NAMES: ['cone', 'pole', 'isolation_barrel', 'triangle_warning', 'animal']  # detection
+
+LABEL_MAPPING: {                # segmentation
+      '0':  0,  # background
+    '300':  255,  # animal
+    '310':  1,  # gate_rod
+    '320':  255,  # cone
+    '330':  255,  # pole
+    '340':  255,  # isolation_barrel
+    '350':  255,  # triangle_warning
+    '360':  2,  # barrier
+    '370':  3,  # permanent_barricade
+    '380':  3,  # temporary_barricade
+    '390':  4,  # construction_sign
+    '400':  5,  # obstacles
+}
+
+DATA_SPLIT: {
+    'train': train,
+    'test': val
+}
+
+INFO_PATH: {
+    'train': [/mnt/lustrenew/xuzhiyong/data/3DGOP_A02/pkls/V1.0/train_infos_unknown_3DGOP_A02_v1.0.pkl],
+    'test': [/mnt/lustrenew/xuzhiyong/data/3DGOP_A02/pkls/V1.0/train_infos_unknown_3DGOP_A02_v1.0.pkl],
+}
+
+POINT_FEATURE_ENCODING: {
+    encoding_type: absolute_coordinates_encoding,
+    used_feature_list: ['x', 'y', 'z', 'intensity'],
+    src_feature_list: ['x', 'y', 'z', 'intensity'],
+}
+
+DATA_AUGMENTOR:
+    DISABLE_AUG_LIST: ['placeholder']
+    AUG_CONFIG_LIST:
+        - NAME: random_world_flip
+          ALONG_AXIS_LIST: ['x']
+
+        - NAME: random_world_rotation
+          WORLD_ROT_ANGLE: [-0.3925, 0.3925]
+          ROT_CLOCKWISE: True
+
+        - NAME: random_world_scaling
+          WORLD_SCALE_RANGE: [0.95, 1.05]
+
+        - NAME: random_world_translation
+          NOISE_TRANSLATE_STD: [0.3, 0.3, 0.3]
+
+
+DATA_PROCESSOR:
+    - NAME: mask_points_and_label_outside_range
+      REMOVE_OUTSIDE_LABEL: True
+
+    - NAME: shuffle_points_and_label
+      SHUFFLE_ENABLED: {
+        'train': True,
+        'test': True
+      }
+
+    - NAME: transform_points_and_label_to_voxels
+      PILLAR_LABEL: True
+      VOXEL_SIZE: *VOXEL_SIZE
+      MAX_POINTS_PER_VOXEL: 32
+      MAX_NUMBER_OF_VOXELS: {
+        'train': 100000,
+        'test': 100000
+      }

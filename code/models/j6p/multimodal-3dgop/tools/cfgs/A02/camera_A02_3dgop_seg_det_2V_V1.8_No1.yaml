@@ -1,0 +1,588 @@
+CLASS_NAMES: &CLASS_NAMES ['cone', 'pole', 'isolation_barrel', 'triangle_warning', 'animal']
+POINT_CLOUD_RANGE: &POINT_CLOUD_RANGE [0, -20.48, -4, 102.4, 20.48, 4]
+VOXEL_SIZE: &VOXEL_SIZE [0.16, 0.16, 8]
+IMAGE_SIZE: &IMAGE_SIZE [512, 1024]
+ANCHOR_OFFSETS: &ANCHOR_OFFSETS [0.16, -20.32, -1.78]
+
+ONNX_CONFIG:
+    point_feature_encoder:
+        num_point_features: 4
+    grid_size: [640, 256, 1]
+    point_cloud_range: *POINT_CLOUD_RANGE
+    voxel_size: *VOXEL_SIZE
+    depth_downsample_factor: 4
+    class_names: *CLASS_NAMES
+
+DATA_CONFIG:
+    TASKS: ['cam']
+    
+    _BASE_CONFIG_: cfgs/dataset_configs/A02_dataset.yaml
+    POINT_CLOUD_RANGE: *POINT_CLOUD_RANGE
+
+    CAMERA_CONFIG:
+        USE_CAMERA: True
+        DATA_SOURCE: A02
+        NORM_CALIB: A02  # 把相机外参转到 "front_x_left_y, height=-1.6" 的标准系
+        IMAGE:
+            VIEWS: ['center_camera_fov120', 'center_camera_fov30']
+            FINAL_DIM: *IMAGE_SIZE
+            CROP_COFF: [0.4, 0.7]
+            CENTER_CROP: {'train': False, 'test': True}
+            RESIZE_LIM_TRAIN: [0.45, 0.45]
+            RESIZE_LIM_TEST: [0.45, 0.45]
+            UPDATE_RESIZE: [null, null]
+
+    FREESPACE_CONFIG:
+        ENABLE: False
+        EGO_FLAG: False
+        VOXEL_SIZE: *VOXEL_SIZE
+        ADJUST_EDGE_WIDTH: null
+
+    BOX_CONFIG:
+        FILTER_EMPTY_BOXES: {'train': True, 'test': True}
+        MIN_FILTER_POINTS: -1
+        ADD_IGNORE: True
+
+    POINT_DIM_ZERO: [1, 1, 1, 0]
+
+    INFO_PATH: {
+        'train': [/mnt/lustrenew/xuzhiyong/data/3DGOP_A02/pkls/V1.8/train_infos_unknown_3DGOP_A02_v1.8_blocked_sh40_.pkl],
+        'test': [/mnt/lustrenew/xuzhiyong/data/3DGOP_A02/pkls/V1.8/val_infos_unknown_3DGOP_A02_v1.8_blocked_sh40.pkl],
+    }
+
+    DATA_RESAMPLE:
+        SEQ_LIST: [['/mnt/lustre/xuzhiyong/code/multimodal-3dgop-xuzhiyong/data/A02/batch_12/batch_12_seq.txt', 100]]
+        RESAMPLE_NUMS: 2
+
+    LABEL_MAPPING: {
+          '0':  0,    # background
+        '300':  255,  # animal
+        '310':  1,    # gate_rod
+        '320':  255,  # cone
+        '330':  255,  # pole
+        '340':  255,  # isolation_barrel
+        '350':  255,  # triangle_warning
+        '360':  2,  # barrier
+        '370':  3,  # permanent_barricade
+        '380':  3,  # temporary_barricade
+        '390':  4,  # construction_sign
+        '400':  5,  # obstacles
+    }
+
+    CEPH:
+        ENABLE: False
+
+    SEQUENTIAL_DATA:
+        REF_FRAME: null
+        USE_POSE: False
+        INTERVAL: {
+            'train': 3,
+            'test': 3
+        }
+
+    PP_HEAVY:
+        VOXEL_SIZE: *VOXEL_SIZE
+        TEST_LIMIT_RANGE: *POINT_CLOUD_RANGE
+        TARGET_ASSIGNER:
+            ANCHOR_GENERATOR: [
+                {
+                    'type': "anchor_generator_stride",
+                    'anchor_range': *POINT_CLOUD_RANGE,
+                    'sizes': [[0.49, 0.51, 0.94]],
+                    'strides': [0.32, 0.32, 0.0], 
+                    'offsets': *ANCHOR_OFFSETS,
+                    'rotations': [0, 1.57],
+                    'matched_threshold': 0.25,
+                    'unmatched_threshold': 0.1,
+                    'feature_map_scale_factor': 1,
+                    'class_name': 'cone'
+                },
+                {
+                    'type': "anchor_generator_stride",
+                    'anchor_range': *POINT_CLOUD_RANGE,
+                    'sizes': [[0.39, 0.42, 0.88]],
+                    'strides': [0.32, 0.32, 0.0], 
+                    'offsets': *ANCHOR_OFFSETS,
+                    'rotations': [0, 1.57],
+                    'matched_threshold': 0.25,
+                    'unmatched_threshold': 0.1,
+                    'feature_map_scale_factor': 1,
+                    'class_name': 'pole'
+                },
+                {
+                    'type': "anchor_generator_stride",
+                    'anchor_range': *POINT_CLOUD_RANGE,
+                    'sizes': [[0.78, 0.80, 0.96]],
+                    'strides': [0.32, 0.32, 0.0], 
+                    'offsets': *ANCHOR_OFFSETS,
+                    'rotations': [0, 1.57],
+                    'matched_threshold': 0.4,
+                    'unmatched_threshold': 0.25,
+                    'feature_map_scale_factor': 1,
+                    'class_name': 'isolation_barrel'
+                },
+                {
+                    'type': "anchor_generator_stride",
+                    'anchor_range': *POINT_CLOUD_RANGE,
+                    'sizes': [[0.62, 0.82, 0.62]],
+                    'strides': [0.32, 0.32, 0.0], 
+                    'offsets': *ANCHOR_OFFSETS,
+                    'rotations': [0, 1.57],
+                    'matched_threshold': 0.25,
+                    'unmatched_threshold': 0.1,
+                    'feature_map_scale_factor': 1,
+                    'class_name': 'triangle_warning'
+                },
+                {
+                    'type': "anchor_generator_stride",
+                    'anchor_range': *POINT_CLOUD_RANGE,
+                    'sizes': [[0.51, 0.55, 0.47]],
+                    'strides': [0.32, 0.32, 0.0], 
+                    'offsets': *ANCHOR_OFFSETS,
+                    'rotations': [0, 1.57],
+                    'matched_threshold': 0.25,
+                    'unmatched_threshold': 0.1,
+                    'feature_map_scale_factor': 1,
+                    'class_name': 'animal'
+                },
+            ]
+            REGION_SIMILARITY_FN: nearest_iou_similarity
+            SAMPLE_POS_FRACTION: -1.0
+            SAMPLE_SIZE: 512
+        BOX_CODER: ResidualCoder
+        DOWNSAMPLE_FACTOR: 2
+
+    DATA_AUGMENTOR:
+        DISABLE_AUG_LIST: ['placeholder']
+        AUG_CONFIG_LIST:
+            - NAME: random_world_flip
+              ALONG_AXIS_LIST: ['x']
+              PROBABILITY: [0.7,0.3]
+
+            # - NAME: random_world_rotation
+            #   WORLD_ROT_ANGLE: [-0.3925, 0.3925]
+            #   ROT_CLOCKWISE: True
+
+            # - NAME: random_world_scaling
+            #   WORLD_SCALE_RANGE: [0.95, 1.05]
+
+            # - NAME: random_world_translation
+            #   NOISE_TRANSLATE_STD: [0.3, 0.3, 0.3]
+
+            - NAME: imgaug
+              ROT_LIM: [-5.4, 5.4]
+              RAND_FLIP: True
+              COLOR: {
+                'CONTRAST':     {'ENABLE': False, 'PROB': 0.25, 'RANGE': [0.4, 1.6]},
+                'BRIGHTNESS':   {'ENABLE': False, 'PROB': 0.25, 'DELTA': 32},
+                'CLAHE':        {'ENABLE': False, 'PROB': 0.25, 'CLIP_LIMIT': 35.0},
+                'GUASS_NOISE':  {'ENABLE': False, 'PROB': 0.25, 'STD': 0.4},
+                'ADJUST_GAMMA': {'ENABLE': False, 'PROB': 0.25, 'GAMMA': 1.0},
+              }
+      
+    DATA_PROCESSOR:
+        - NAME: image_calibrate
+        
+        - NAME: image_normalize
+          mean: [0.485, 0.456, 0.406]
+          std: [0.229, 0.224, 0.225]
+
+        - NAME: mask_points_and_label_outside_range
+          REMOVE_OUTSIDE_LABEL: True
+
+        - NAME: mask_points_and_label_outside_fov  # 仅在训camera时用，训fusion时用全范围的gt
+          REMOVE_OUTSIDE_POINTS_LABEL: True
+          REMOVE_OUTSIDE_BOXES_LABEL: True
+          IMAGE_SIZE: *IMAGE_SIZE
+          GT_DEPTH: False
+          MIN_KEPT_POINTS_IN_BOX: 1
+
+        - NAME: shuffle_points_and_label
+          SHUFFLE_ENABLED: {
+            'train': True,
+            'test': True
+          }
+
+        - NAME: transform_points_and_label_to_voxels
+          PILLAR_LABEL: True
+          VOXEL_SIZE: *VOXEL_SIZE
+          MAX_POINTS_PER_VOXEL: 32
+          MAX_NUMBER_OF_VOXELS: {
+            'train': 100000,
+            'test': 100000
+          }
+
+        - NAME: get_convexHull_voxel_label
+          PIXEL_WIDTH: -2
+          CLASS_ID: {'barrier': 2, 'permanent_barricade': 3, 'temporary_barricade': 3}
+          MODE: 'convexHull'  # 'convexHull' or 'fillBox'
+          RANGE: [0, 0, 256, 256]  # [x1, y1, x2, y2] to erode
+          IGNORE_ZERO_BOX: True
+          IGNORE_EMPTY_IN_BOX:
+            ENABLE: True
+            RANGE: null  # [256, 0, 640, 256] 起作用的范围
+
+        # - NAME: dilate_and_erode_voxel_label
+        #   PIXEL_WIDTH: -2
+        #   CHOICE_ID: [2, 3]
+        #   TASK_IGNORE: null  # ['lidar', 'fusion']
+
+MODEL:
+    NAME: BevFusion_Seg
+
+    # FREEZE:
+    #     # ['image_backbone', 'neck', 'vtransform', 'backbone_2d_cam', 'vfe', 'map_to_bev_module', 'backbone_2d']
+    #     # ['dense_head_det_lidar', 'dense_head_det_cam', 'dense_head_seg_lidar', 'dense_head_seg_cam']
+    #     FIX_MODULES: ['vfe']
+    #     IGNORE_KEYs: null
+    #     GRAD_BACK_FLAG: False
+    FUSE_LATER: True
+
+    # VFE:
+    #     NAME: PillarVFE_Seg
+    #     WITH_DISTANCE: False
+    #     USE_ABSLOTE_XYZ: True
+    #     USE_NORM: True
+    #     NUM_FILTERS: [32]
+    #     INIT_CFG:
+    #         type: Pretrained
+    #         checkpoint: checkpoints/GAC-3M1-sw13.0-ch32-vfe_PCSeg.pth
+
+    # MAP_TO_BEV:
+    #     NAME: PointPillarScatter_Seg
+    #     NUM_BEV_FEATURES: 32
+
+    IMAGE_BACKBONE:
+        NAME: DLANet_
+        DEPTH: 34
+        IN_CHANNELS: 3
+        OUT_INDICES: [3, 4, 5]
+        NORM_CFG: {'type':'SyncBN', 'requires_grad':True}
+        PRETRAINED: checkpoints/occ_DLA34_backbone.pth
+
+    NECK:
+        NAME: CustomFPN
+        IN_CHANNELS: [128, 256, 512]
+        OUT_CHANNELS: 256
+        START_LEVEL: 0
+        END_LEVEL: -1
+        NUM_OUTS: 1
+        OUT_IDS: [0]
+
+    VTRANSFORM:
+        NAME: AttentionTransform_Lidaraug
+        NUM_VIEW: 2
+        IMAGE_SIZE: *IMAGE_SIZE
+        IN_CHANNEL: 256
+        OUT_CHANNEL: 256
+        # LIDAR2IMAGE_NOISE:
+        #     NOISE_PROB: 0.2
+        #     NOISE_SIZE: 50
+        OUTPUT_PROJ:
+            MID_CHANNEL: 64  # replace OUT_CHANNEL for gridsample
+            FINAL_OUT_CHANNEL: 256
+        NUM_POINTS_IN_PILLAR: 15
+        NUM_FEATURE_LEVELS: 1
+        USE_CAMS_EMBEDS: True
+        FEATURE_SIZE: [64, 128]
+        XBOUND: [0, 102.4, 0.64]
+        YBOUND: [-20.48, 20.48, 0.64]
+        ZBOUND: [-4.0, 4.0, 0.2]
+
+    BACKBONE_2D_CAM:
+        NAME: BaseBEVBackbone_FPN_cam
+        INPUT_BEV_SIZE: [64, 160]  # bev-map (h, w)
+        DOWNSAMPLE_INPUT:
+            STRIDE: 0.5
+            IN_CHANNEL: 256
+            OUT_CHANNEL: 64
+        USE_DECONV: True
+        USE_CA: True
+        NUM_BEV_FEATURES: 64
+        LAYER_NUMS: [4, 4, 4]
+        LAYER_STRIDES: [1, 2, 2]
+        NUM_FILTERS: [80, 96, 128]
+        UPSAMPLE_STRIDES: [1, 2, 4]
+        NUM_UPSAMPLE_FILTERS: [32, 32, 32]
+        OUT_INDICES: [0, 1, 2]
+        RETURN_LIST: ['cat']
+
+    # BACKBONE_2D:
+    #     NAME: BaseBEVBackbone_FPN
+    #     DOWNSAMPLE_INPUT: null
+    #     USE_DECONV: True
+    #     LAYER_NUMS: [4, 4, 4]
+    #     LAYER_STRIDES: [2, 2, 2]
+    #     NUM_FILTERS: [80, 96, 128]
+    #     UPSAMPLE_STRIDES: [1, 2, 4]
+    #     NUM_UPSAMPLE_FILTERS: [32, 32, 32]
+    #     OUT_INDICES: [0, 1, 2]
+    #     RETURN_LIST: ['cat']
+    
+    # FUSER:
+    #     NAME: ConvFuser_later_atten
+    #     IN_CHANNEL: 192
+    #     OUT_CHANNEL: 96
+    #     LAYERS_CONV: 3
+
+    DENSE_HEAD_DET_CAM:
+        TASK: cam
+        NAME: pp_heavy_head
+        CLASS_AGNOSTIC: False
+        TO_CAFFE: False
+        SET_QUANTIZATION: False
+        RPN_HEAD_GROUP_NUMS: [1, 1, 1]
+        USE_PPHEAVY_LOSS: True
+        RPN_STAGE:
+            NET: PointPillarsScatter
+            FIXED: False
+            DOWNSAMPLE_FACTOR: 2
+            NUM_HEAD_INPUT_FEATURES: 32
+            ENCODE_BG_AS_ZEROS: True
+            USE_SIGMOID_SCORE: True
+            USE_ROTATED_NMS: False
+            AUTOWEIGHT: False
+            AUTO_ONLY_PED_CYC: True
+            AUTO_ONLY_PED_CYC_TRUCK: False
+            AUTOWEIGHT_COFF: 1.0
+            AUTOWEIGHT_INIT: True
+            AUTO_POS_CLS: False
+            AUTOWEIGHT_CLASS_BAL: True
+            AUTOWEIGHT_CLASS_BAL_COFF: 0.2
+            AUTOWEIGHT_FIXED: False
+            BN_MOM: -1.0
+            GHM_CLS: False
+            GHM_CLS_BINS: 30
+            GHM_CLS_MOM: 0.75
+            GHM_REG: False
+            GHM_REG_BINS: 10
+            GHM_REG_MOM: 0.7
+            AUTOLOSS: False
+            NORM_REG_ENCOD: False
+            EQL_CLS: False
+            EQL_RARE_CLASS: []
+            OHNM: False
+            OHNM_RANDOM: False
+            OHNM_FRAC: 0.0
+            FOCAL_LOSS: True
+            NON_FOCAL_LOSS_WEIGHT: False
+            NORM_REG_ENCOD: False
+            GFL: 
+                USE_QFL: False
+            BACKBONE:
+                PART_REG_ENABLED: True
+                PRE_ACTIVATION: False
+                USE_GROUPNORM: False
+                USE_BNET: False
+                BNET_K: 3
+                VoV_TRANS_CONCAT: False
+                VoV_SE: False
+                VoV_IDMAP: False
+                REPVGG: False
+                KEEP_RES: False
+                SE_REDUCTION: 16
+                HEAD_SE: False 
+                VFE_SE: False
+                BACKBONE_SE: False
+                FIX_BACKBONE: False 
+                FPN_SE: False
+                GHOST_MODULE_USE: False
+                GHOST_MODULE_LAYER_RANGE: []
+                ASYMMRES_MODULE_USE: False
+                CONVGROUPS: [1, 1, 1]
+                RFBBLOCK_USE: False
+                RFBBLOCK_SCALE: 0.1
+                NUM_GROUPS: 16
+                FPN:
+                    PP_FPN: False
+                    PP_FPN_HEAVY: True
+                    FPGA_FPNv1: False
+                    FPGA_FPNv2: False
+                    FPN_STACK_NUM: 1
+                    PP_FPN_HEAVY_upsample: False
+                    PP_FPN_ORI: False
+                    FCONV3: False
+                    FPN_OUT2: False
+                    FPN_SUM: True
+                    FPN_CONCAT: False
+                    FPN_OUT2: False
+
+            IOU_HEAD: 
+                USE: False
+                USE_AUTOWEIGHT: True
+                AUTO_ONLY_PED_CYC: True
+                AUTO_ONLY_PED_CYC_TRUCK: False
+                IOU_WEIGHT: 1.0 
+                AUTOWEIGHT_COFF: 1.0
+                AUTOWEIGHT_CLASS_BAL_COFF: 0.2
+                LABEL_NO_GRAD: True
+                ROTATED_BEV_IOU: False
+                ROTATED_3D_IOU: False
+
+            RPN_HEAD:
+                NET: MultiHeadRPN                                                                                      
+                LAYER_STRIDES: [1, 2]                                                                                                 
+                UPSAMPLE_STRIDES: [1, 2]                                                                                              
+                LAYER_NUMS: [5, 5]                                                                                                    
+                NUM_FILTERS: [128, 256]                                                                                               
+                NUM_UPSAMPLE_FILTERS: [256, 256]                                                                                      
+                USE_GROUPNORM: False                                                                                                  
+                NUM_GROUPS: 32
+
+                NUM_INPUT_FEATURES: 32
+                USE_DIRECTION_CLASSIFIER: True
+                ENCODE_RAD_ERROR_BY_SIN: True
+                HEAD_INIT_WEIGHT: True
+                LOC_SIGMA: 4.0
+                REG_VARIANCE:
+                    OUTPUT: True
+                    KL_LOSS: True
+                REG_ATTRIBUTES_WEIGHTS:
+                    USE: False                                                                                     
+                    BEV: 1.0                                                                                       
+                    H3D: 1.0
+                FPGA_IOU_LOSS:
+                    USE: True
+                    CLS_IOU_LOSS: True
+                    LOC_IOU_LOSS: False
+
+                RPN_BASE_ARGS: {
+                        "split_fpn": 0,
+                        "use_norm": True,
+                        "layer_nums": [4, 5, 6],
+                        "layer_strides": [2, 2, 2],
+                        "num_filters": [128, 160, 192],
+                        "upsample_strides": [1, 2, 4],
+                        "num_upsample_filters": [32, 32, 32],
+                        "num_input_features": 32,
+                        "use_groupnorm": False,
+                        "num_groups": 16,
+                        "use_deconv": True,
+                        "pre_conv": True,
+                        "resblock": 'BasicBlock',
+                        "res_stage_1_split_conv": True,
+                        "num_res_stages": 3,
+                        "num_res_blocks": [5, 15, 16],
+                        "res_stage_dilation": [False, False, False],
+                        "num_res_filters": [160, 192, 224],
+                        "groups": 1,
+                        "width_per_group": 64,
+                        "zero_init_residual": False,
+                        "droprate": 0.0,
+                        "num_hourglass_stacks": 1,
+                        "num_hourglass_blocks": 1,
+                        "num_hourglass_feats": 128,
+                        "dense_layer_type": 'B',
+                        "num_dense_stages": 3,
+                        "num_dense_blocks": [4, 5, 6],
+                        "num_dense_filters": [128, 64, 64]
+                }
+
+                LOSS_WEIGHTS: {
+                        'cls_weight': 1.0,
+                        'loc_weight': 2.0,
+                        'dir_weight': 0.2
+                    }
+                RPN_HEAD_ARGS: [
+                    {
+                        "input_channels": 96,
+                        "class_name": *CLASS_NAMES,
+                        "num_filters": 96,
+                        "conv_nums": 0,
+                        "dilation": [],
+                        "use_se": False,
+                        "use_res": False,
+                        "use_glore": False,
+                        "use_shuffle": False,
+                        "downsample_level": 2,
+                        "ratio": 4,
+                        "se_ratio": 8,
+                        "num_res": 1,
+                        "ds_keep_ratio": 1.0,
+                        "ks1": 3
+                    },
+
+                ]
+        CLASS_NAMES: *CLASS_NAMES
+        FPGA_NMS: True
+        # SCALE_NMS:
+        #     ENABLE: True
+        #     RANGE: [-100, -100, 200, 100]  # [x1, y1, x2, y2]
+        #     RATIO: 5.0
+        TRAIN:
+            SPLIT: train
+            LS_WEIGHTS: [1.0, 1.0, 1.0, 1.0, 1.0]
+            POS_LS: 4.0
+        TEST:
+            SPLIT: val
+            POST_CENTER_LIMIT_RANGE: *POINT_CLOUD_RANGE
+            NMS_THRESH: 0.1
+            NMS_THRESH_LIST: [0.1, 0.1, 0.2, 0.1, 0.1]
+            SCORE_THRESH_LIST: [0.1, 0.1, 0.1, 0.1, 0.1]
+            EVAL_IN_LIDAR: True
+            EVAL_WITH_CLOSEBOX: False
+    
+    DENSE_HEAD_SEG_CAM:
+        TASK: cam
+        NAME: SegHead_pcseg
+        CLASS_AGNOSTIC: False
+        CLASS_NAMES: ['background', 'gate_rod', 'barrier', 'permanent_barricade/temporary_barricade', 'construction_sign', 'obstacles']
+        CLASS_NAMES_EACH_HEAD: [
+            ['background', 'gate_rod', 'barrier', 'permanent_barricade/temporary_barricade', 'construction_sign', 'obstacles']
+        ]
+
+        USE_DECONV: True
+        INPUT_FEATURES: 96
+        SHARED_CONV_CHANNEL: 32
+        USE_BIAS_BEFORE_NORM: True
+        NUM_HM_CONV: 2
+        FEATURE_DWON_STRIDE: 2
+        SEPARATE_HEAD_CFG:
+            HEAD_DICT: {
+                'cam': {'out_channels': 6, 'mid_channels': 32, 'num_conv': 2},
+            }
+
+        LOSS_CONFIG:
+            LOSS_WEIGHTS: {
+              'cam': {'task_weight': [100.0], 'class_weight': null, 'gamma': null, 'alpha': null}
+            }
+            LOSS_NAMES: {
+              'cam': ['focalbce']
+            }
+            HIST_CLASS: {
+              'cam': 6
+            }
+
+        POST_PROCESSING:
+            ACTIVE_FUNC: {
+              'cam': {'train': 'no', 'test': 'sigmoid', 'score': [0.3, 0.3, 0.3, 0.3, 0.2]},
+            }  # 'softmax' or 'sigmoid' or 'no'
+
+    POST_PROCESSING:
+        RECALL_THRESH_LIST: [0.3, 0.5, 0.7]
+        EVAL_METRIC: kitti
+
+
+OPTIMIZATION:
+    BATCH_SIZE_PER_GPU: 1  # bs:64
+    NUM_EPOCHS: 40
+
+    EVAL_WHEN_TRAINING: True
+    EVAL_START_EPOCH: 30
+
+    OPTIMIZER: adam_onecycle
+    LR: 0.00425
+    WEIGHT_DECAY: 0.001
+    MOMENTUM: 0.9
+
+    MOMS: [0.95, 0.85]
+    PCT_START: 0.4
+    DIV_FACTOR: 10
+    DECAY_STEP_LIST: [35, 45]
+    LR_DECAY: 0.1
+    LR_CLIP: 0.0000001
+
+    LR_WARMUP: False
+    WARMUP_EPOCH: 1
+
+    GRAD_NORM_CLIP: 10

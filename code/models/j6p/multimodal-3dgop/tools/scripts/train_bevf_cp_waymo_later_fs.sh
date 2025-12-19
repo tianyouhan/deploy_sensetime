@@ -1,0 +1,1 @@
+./scripts/slurm_train.sh adv100 train 8 --cfg_file=cfgs/waymo_models/bevfusion_cp_later_fs_v6.yaml --pretrained_model centerpoint/checkpoint.pth --extra_tag v1 --load_from_cam bevdet_cam_cp/checkpoint.pth 
